@@ -10,17 +10,21 @@ export class BoardComponent implements OnInit {
   squares: any[];
   xIsNext: boolean;
   winner: string;
+  started: boolean;
+  tie: boolean;
 
   constructor() { }
 
   ngOnInit() {
-    this.newGame();
+    // this.newGame();
   }
 
   newGame(){
     this.squares = Array(9).fill(null);
     this.winner = null;
     this.xIsNext = true;
+    this.started = true;
+    this.tie = false;
   }
 
   get player(){
@@ -33,6 +37,14 @@ export class BoardComponent implements OnInit {
       this.xIsNext = !this.xIsNext;
     }
     this.winner = this.calculateWinner();
+    this.check();
+  }
+
+  check(){
+    for(let i = 0;i<this.squares.length;i++){
+      if(this.squares[i] === null) return;
+    }
+    this.tie = true;
   }
 
   calculateWinner(){
@@ -52,8 +64,10 @@ export class BoardComponent implements OnInit {
         this.squares[a] &&
         this.squares[a] === this.squares[b] &&
         this.squares[a] === this.squares[c]
-      )
+      ){
+        this.started = false;
         return this.squares[a];
+      }
     }
     return null;
   }
